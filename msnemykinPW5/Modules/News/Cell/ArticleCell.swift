@@ -4,7 +4,7 @@ final class ArticleCell: UITableViewCell {
     
     private enum Constants {
         static let cornerRadius: CGFloat = 30
-        static let imageHeight: CGFloat = 250
+        static let imageHeight: CGFloat = 225
         static let titleTopPadding: CGFloat = 8
         static let horizontalPadding: CGFloat = 12
         static let descriptionTopPadding: CGFloat = 4
