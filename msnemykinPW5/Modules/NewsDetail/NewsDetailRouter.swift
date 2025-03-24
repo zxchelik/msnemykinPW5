@@ -3,7 +3,7 @@ import UIKit
 final class NewsDetailRouter: NewsDetailRouterProtocol {
     weak var viewController: UIViewController?
     
-    static func createModule(article: Article) -> UIViewController {
+    static func build(article: Article) -> UIViewController {
         let router = NewsDetailRouter()
         let interactor = NewsDetailInteractor(article: article)
         let view = NewsDetailViewController()

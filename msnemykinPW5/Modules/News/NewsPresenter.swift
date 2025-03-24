@@ -31,6 +31,6 @@ final class NewsPresenter: NewsPresenterProtocol {
         let articles = interactor.articles
         guard index < articles.count else { return }
         let article = articles[index]
-        router.showDetail(for: article)
+        router.showDetails(for: article)
     }
 }

@@ -26,5 +26,5 @@ protocol NewsDataStore {
 
 // MARK: - Router
 protocol NewsRouterProtocol: AnyObject {
-    func showDetail(for article: Article)
+    func showDetails(for article: Article)
 }

@@ -44,12 +44,31 @@ final class ArticleCell: UITableViewCell {
         return label
     }()
     
+    private let shareButton: UIButton = {
+        let button = UIButton(type: .system)
+        button
+            .setImage(
+                UIImage(
+                    systemName: "square.and.arrow.up.circle",
+                    withConfiguration: UIImage
+                        .SymbolConfiguration(pointSize: 20)
+                ),
+                for: .normal
+            )
+        button.tintColor = .label
+        return button
+    }()
+    
     private var shimmerView: UIView?
+    
+    // MARK: - Public Properties
+        weak var delegate: ArticleCellDelegate?
     
     // MARK: - Initializers
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
+        setupActions()
     }
     
     required init?(coder: NSCoder) {
@@ -66,6 +85,7 @@ final class ArticleCell: UITableViewCell {
         contentView.addSubview(newsImageView)
         contentView.addSubview(titleLabel)
         contentView.addSubview(descriptionLabel)
+        contentView.addSubview(shareButton)
         
         contentView.backgroundColor = .secondarySystemBackground
         contentView.layer.cornerRadius = Constants.cornerRadius
@@ -76,6 +96,9 @@ final class ArticleCell: UITableViewCell {
         newsImageView.pinRight(to: contentView.trailingAnchor)
         newsImageView.setHeight(Constants.imageHeight)
         
+        shareButton.pinTop(to: newsImageView.topAnchor,8)
+        shareButton.pinRight(to: newsImageView.trailingAnchor,8)
+        
         titleLabel.pinTop(to: newsImageView.bottomAnchor, Constants.titleTopPadding)
         titleLabel.pinLeft(to: contentView.leadingAnchor, Constants.horizontalPadding)
         titleLabel.pinRight(to: contentView.trailingAnchor, Constants.horizontalPadding)
@@ -85,6 +108,14 @@ final class ArticleCell: UITableViewCell {
         descriptionLabel.pinRight(to: contentView.trailingAnchor, Constants.horizontalPadding)
         descriptionLabel.pinBottom(to: contentView.bottomAnchor, Constants.descriptionBottomPadding)
         descriptionLabel.setHeight(Constants.descriptionHeight)
+    }
+    
+    private func setupActions() {
+        shareButton.addTarget(self, action: #selector(didTapShareButton), for: .touchUpInside)
+    }
+
+    @objc private func didTapShareButton() {
+        delegate?.shareButtonTapped(in: self)
     }
     
     // MARK: - Configure Cell

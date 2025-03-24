@@ -81,11 +81,18 @@ extension NewsViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellIdentifier, for: indexPath) as? ArticleCell else {
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: "ArticleCell",
+            for: indexPath
+        ) as? ArticleCell else {
             return UITableViewCell()
         }
+                
         let article = articles[indexPath.row]
         cell.configure(with: article)
+        // ВАЖНО: назначаем делегат
+        cell.delegate = self
+                
         return cell
     }
 }
@@ -96,27 +103,22 @@ extension NewsViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         presenter.didSelectArticle(at: indexPath.row)
     }
-    
-    func tableView(
-        _ tableView: UITableView,
-        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
-    ) -> UISwipeActionsConfiguration? {
+}
+
+// MARK: - ArticleCellDelegate
+extension NewsViewController: ArticleCellDelegate {
+    func shareButtonTapped(in cell: ArticleCell) {
+        guard let indexPath = tableView.indexPath(for: cell) else { return }
         
-        let shareAction = UIContextualAction(style: .normal, title: Constants.shareTitle) { [weak self] _, _, completion in
-            guard let self else { return }
-            let article = self.articles[indexPath.row]
-            let shareText = article.articleUrl?.absoluteString ?? Constants.defaultShareText
-            let activityVC = UIActivityViewController(
-                activityItems: [shareText],
-                applicationActivities: nil
-            )
-            self.present(activityVC, animated: true)
-            completion(true)
-        }
-        shareAction.backgroundColor = Constants.shareActionColor
+        let article = articles[indexPath.row]
         
-        let config = UISwipeActionsConfiguration(actions: [shareAction])
-        config.performsFirstActionWithFullSwipe = false
-        return config
+        let shareText = article.articleUrl?.absoluteString ?? "No link"
+        
+        let activityVC = UIActivityViewController(
+            activityItems: [shareText],
+            applicationActivities: nil
+        )
+        
+        present(activityVC, animated: true, completion: nil)
     }
 }
